@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Checkout.Src.Exceptions
 {
+    [ExcludeFromCodeCoverage]
     public class NegativePriceException : ArgumentException
     {
 
@@ -11,14 +13,5 @@ namespace Checkout.Src.Exceptions
         {
         }
 
-        public NegativePriceException(string paramName)
-            : base(DefaultMessage, paramName)
-        {
-        }
-
-        public NegativePriceException(string message, Exception innerException)
-            : base(message, innerException)
-        {
-        }
     }
 }
