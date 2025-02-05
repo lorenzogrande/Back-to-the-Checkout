@@ -2,16 +2,17 @@
 using Checkout.Src.Exceptions;
 namespace Checkout.Src.Entities;
 
-public class Sku
+public partial class Sku
 {
     public string Value { get; }
+    private static readonly Regex allowedSku = generateValidSkuRegex();
 
     public Sku(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
             throw new EmptySkuException();
 
-        if (!Regex.IsMatch(value, @"^[a-zA-Z]$"))
+        if (!allowedSku.IsMatch(value))
             throw new InvalidSkuException();
 
         Value = value;
@@ -26,4 +27,7 @@ public class Sku
     {
         return Value.GetHashCode();
     }
+
+    [GeneratedRegex(@"^[a-zA-Z]$", RegexOptions.Compiled)]
+    private static partial Regex generateValidSkuRegex();
 }
