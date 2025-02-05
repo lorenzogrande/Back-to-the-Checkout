@@ -1,5 +1,7 @@
 using Checkout.Src.Entities;
 using Checkout.Src.Exceptions;
+using FluentAssertions;
+using System;
 using Xunit;
 
 namespace Checkout.Tests.Entities
@@ -16,7 +18,7 @@ namespace Checkout.Tests.Entities
             var price = new Price(value);
 
             // Assert
-            Assert.Equal(value, price.Value);
+            price.Value.Should().Be(value);
         }
 
         [Fact]
@@ -29,7 +31,7 @@ namespace Checkout.Tests.Entities
             var price = new Price(value);
 
             // Assert
-            Assert.Equal(value, price.Value);
+            price.Value.Should().Be(value);
         }
 
         [Fact]
@@ -39,7 +41,8 @@ namespace Checkout.Tests.Entities
             decimal value = -1m;
 
             // Act & Assert
-            Assert.Throws<NegativePriceException>(() => new Price(value));
+            Action act = () => new Price(value);
+            act.Should().Throw<NegativePriceException>();
         }
 
         [Fact]
@@ -53,7 +56,7 @@ namespace Checkout.Tests.Entities
             bool areEqual = price1.Equals(price2);
 
             // Assert
-            Assert.True(areEqual);
+            areEqual.Should().BeTrue();
         }
 
         [Fact]
@@ -67,7 +70,7 @@ namespace Checkout.Tests.Entities
             bool areEqual = price1.Equals(price2);
 
             // Assert
-            Assert.False(areEqual);
+            areEqual.Should().BeFalse();
         }
 
         [Fact]
@@ -82,7 +85,7 @@ namespace Checkout.Tests.Entities
             int hashCode2 = price2.GetHashCode();
 
             // Assert
-            Assert.Equal(hashCode1, hashCode2);
+            hashCode1.Should().Be(hashCode2);
         }
 
         [Fact]
@@ -97,7 +100,7 @@ namespace Checkout.Tests.Entities
             int hashCode2 = price2.GetHashCode();
 
             // Assert
-            Assert.NotEqual(hashCode1, hashCode2);
+            hashCode1.Should().NotBe(hashCode2);
         }
     }
 }

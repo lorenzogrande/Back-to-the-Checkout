@@ -1,5 +1,7 @@
 using Checkout.Src.Entities;
 using Checkout.Src.Exceptions;
+using FluentAssertions;
+using System;
 using Xunit;
 
 namespace Checkout.Tests.Entities
@@ -16,7 +18,7 @@ namespace Checkout.Tests.Entities
             var sku = new Sku(value);
 
             // Assert
-            Assert.Equal(value, sku.Value);
+            sku.Value.Should().Be(value);
         }
 
         [Fact]
@@ -26,7 +28,8 @@ namespace Checkout.Tests.Entities
             string value = null;
 
             // Act & Assert
-            Assert.Throws<EmptySkuException>(() => new Sku(value));
+            Action act = () => new Sku(value);
+            act.Should().Throw<EmptySkuException>();
         }
 
         [Fact]
@@ -36,7 +39,8 @@ namespace Checkout.Tests.Entities
             string value = "";
 
             // Act & Assert
-            Assert.Throws<EmptySkuException>(() => new Sku(value));
+            Action act = () => new Sku(value);
+            act.Should().Throw<EmptySkuException>();
         }
 
         [Fact]
@@ -46,7 +50,8 @@ namespace Checkout.Tests.Entities
             string value = "   ";
 
             // Act & Assert
-            Assert.Throws<EmptySkuException>(() => new Sku(value));
+            Action act = () => new Sku(value);
+            act.Should().Throw<EmptySkuException>();
         }
 
         [Fact]
@@ -56,7 +61,8 @@ namespace Checkout.Tests.Entities
             string value = "123";
 
             // Act & Assert
-            Assert.Throws<InvalidSkuException>(() => new Sku(value));
+            Action act = () => new Sku(value);
+            act.Should().Throw<InvalidSkuException>();
         }
 
         [Fact]
@@ -66,7 +72,8 @@ namespace Checkout.Tests.Entities
             string value = "AB";
 
             // Act & Assert
-            Assert.Throws<InvalidSkuException>(() => new Sku(value));
+            Action act = () => new Sku(value);
+            act.Should().Throw<InvalidSkuException>();
         }
 
         [Fact]
@@ -80,7 +87,7 @@ namespace Checkout.Tests.Entities
             bool areEqual = sku1.Equals(sku2);
 
             // Assert
-            Assert.True(areEqual);
+            areEqual.Should().BeTrue();
         }
 
         [Fact]
@@ -94,7 +101,7 @@ namespace Checkout.Tests.Entities
             bool areEqual = sku1.Equals(sku2);
 
             // Assert
-            Assert.False(areEqual);
+            areEqual.Should().BeFalse();
         }
 
         [Fact]
@@ -109,7 +116,7 @@ namespace Checkout.Tests.Entities
             int hashCode2 = sku2.GetHashCode();
 
             // Assert
-            Assert.Equal(hashCode1, hashCode2);
+            hashCode1.Should().Be(hashCode2);
         }
 
         [Fact]
@@ -124,7 +131,7 @@ namespace Checkout.Tests.Entities
             int hashCode2 = sku2.GetHashCode();
 
             // Assert
-            Assert.NotEqual(hashCode1, hashCode2);
+            hashCode1.Should().NotBe(hashCode2);
         }
     }
 }
