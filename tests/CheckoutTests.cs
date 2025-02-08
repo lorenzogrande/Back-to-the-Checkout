@@ -38,7 +38,7 @@ namespace Checkout.Tests
         }
 
         [Fact]
-        public void CalculateTotal_With_Null_Strategy_Throws()
+        public void Constructor_With_Null_Strategy_Throws()
         {
             // Act
             Action act = () => new Checkout(null!);
