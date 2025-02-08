@@ -38,13 +38,16 @@ namespace Checkout.Tests
         }
 
         [Fact]
-        public void Constructor_With_Null_Strategy_Throws()
+        public void CalculateTotal_With_Null_Strategy_Returns_0()
         {
+            // Arrange
+            var checkout = new Checkout(null!);
+
             // Act
-            Action act = () => new Checkout(null!);
+            Price total = checkout.CalculateTotal();
 
             // Assert
-            act.Should().Throw<ArgumentNullException>();
+            total.Value.Should().Be(0);
         }
 
 

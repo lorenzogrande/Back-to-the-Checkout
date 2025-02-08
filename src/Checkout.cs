@@ -11,7 +11,7 @@ public class Checkout
 
     public Checkout(IPricingStrategy pricingStrategy)
     {
-        this.pricingStrategy = pricingStrategy ?? throw new ArgumentNullException(nameof(pricingStrategy));
+        this.pricingStrategy = pricingStrategy ?? new NullPricingStrategy();
     }
 
     public void ScanItem(Sku sku)
