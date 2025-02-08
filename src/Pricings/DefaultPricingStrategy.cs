@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Checkout.Src.Entities;
 using Checkout.Src.Exceptions;
 namespace Checkout.Src.Pricings;
@@ -9,14 +9,23 @@ public class DefaultPricingStrategy : IPricingStrategy
 
     public DefaultPricingStrategy(IEnumerable<PricingRule> rules)
     {
-        pricingRules = rules.ToDictionary(rule => rule.Sku);
+        pricingRules = [];
+
+        foreach (var rule in rules)
+        {
+            if (pricingRules.ContainsKey(rule.Sku))
+            {
+                throw new DuplicatePricingRuleException(rule.Sku);
+            }
+            pricingRules[rule.Sku] = rule;
+        }
     }
 
-    public Price CalculateTotal(Dictionary<Sku, Quantity> scannedItems)
+    public Price CalculateTotal(ScannedItems scannedItems)
     {
         decimal total = 0;
 
-        foreach (var item in scannedItems)
+        foreach (var item in scannedItems.GetItems())
         {
             var sku = item.Key;
             var count = item.Value.Value;

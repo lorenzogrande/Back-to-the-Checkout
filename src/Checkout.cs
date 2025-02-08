@@ -1,16 +1,17 @@
 using Checkout.Src.Entities;
 using Checkout.Src.Pricings;
+using System;
 
 namespace Checkout;
 
 public class Checkout
 {
-    private readonly ScannedItems scannedItems = new ScannedItems();
+    private readonly ScannedItems scannedItems = new ();
     private readonly IPricingStrategy pricingStrategy;
 
     public Checkout(IPricingStrategy pricingStrategy)
     {
-        this.pricingStrategy = pricingStrategy;
+        this.pricingStrategy = pricingStrategy ?? throw new ArgumentNullException(nameof(pricingStrategy));
     }
 
     public void ScanItem(Sku sku)
@@ -20,6 +21,6 @@ public class Checkout
 
     public Price CalculateTotal()
     {
-        return pricingStrategy.CalculateTotal(scannedItems.GetItems());
+        return pricingStrategy.CalculateTotal(scannedItems);
     }
 }

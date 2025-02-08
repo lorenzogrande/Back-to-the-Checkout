@@ -3,13 +3,13 @@ namespace Checkout.Src.Entities;
 
 public class ScannedItems
 {
-    private readonly Dictionary<Sku, Quantity> items = new();
+    private readonly Dictionary<Sku, Quantity> items = [];
 
     public void Add(Sku sku)
     {
-        if (items.TryGetValue(sku, out Quantity value))
+        if (items.TryGetValue(sku, out Quantity? value))
         {
-            items[sku] = new Quantity(value.Value + 1);
+            items[sku] = new Quantity(value!.Value + 1);
         }
         else
         {
