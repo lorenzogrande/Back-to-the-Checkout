@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Checkout.Src.Entities;
 using Checkout.Src.Exceptions;
@@ -29,27 +28,27 @@ public class DefaultPricingStrategy : IPricingStrategy
         {
             var sku = item.Key;
             var count = item.Value.Value;
+            if (PricingRuleDoesntExist(sku, out PricingRule rule))
+                throw new MissingPricingRuleException(sku);
 
-            if (pricingRules.TryGetValue(sku, out var rule))
+            if (rule.DiscountThreshold.Value > 0)
             {
-                if (rule.DiscountThreshold.Value > 0)
-                {
-                    int discountedItems = count / rule.DiscountThreshold.Value;
-                    int regularItems = count - discountedItems;
+                int discountedItems = count / rule.DiscountThreshold.Value;
+                int regularItems = count - discountedItems;
 
-                    total += discountedItems * rule.DiscountedPrice.Value + regularItems * rule.RegularPrice.Value;
-                }
-                else
-                {
-                    total += count * rule.RegularPrice.Value;
-                }
+                total += discountedItems * rule.DiscountedPrice.Value + regularItems * rule.RegularPrice.Value;
             }
             else
             {
-                throw new MissingPricingRuleException(sku);
+                total += count * rule.RegularPrice.Value;
             }
         }
 
         return new Price(total);
+    }
+
+    private bool PricingRuleDoesntExist(Sku sku, out PricingRule rule)
+    {
+        return !pricingRules.TryGetValue(sku, out rule!);
     }
 }
